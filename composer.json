@@ -20,6 +20,7 @@
         "kodephp"
     ],
     "homepage": "https://github.com/kodephp/server",
+    "version": "1.0.1",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -38,9 +39,9 @@
         "psr/http-message": "^1.1 || ^2.0",
         "psr/http-server-handler": "^1.0",
         "psr/log": "^2.0 || ^3.0",
-        "kode/process": "*",
-        "kode/fibers": "*",
-        "kode/parallel": "*"
+        "kode/process": "^3.2",
+        "kode/fibers": "^4.0",
+        "kode/parallel": "^1.6"
     },
     "require-dev": {
         "nyholm/psr7": "^1.8",
