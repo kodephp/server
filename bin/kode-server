@@ -1,0 +1,44 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/*
+ * kode/server 命令行入口。
+ *
+ * 这里只做一件事：找到 autoload 并把控制权交给 Console\Cli。
+ * 保持极简是有意的——启停脚本坏掉的代价比任何功能缺失都大。
+ */
+
+if (\PHP_SAPI !== 'cli') {
+    fwrite(\STDERR, 'kode-server 只能在 CLI 下运行。' . \PHP_EOL);
+    exit(1);
+}
+
+$autoloads = [
+    // 作为依赖被安装：vendor/kode/server/bin/kode-server
+    __DIR__ . '/../../../autoload.php',
+    // 独立开发本包
+    __DIR__ . '/../vendor/autoload.php',
+    // 通过 COMPOSER_VENDOR_DIR 指定
+    getcwd() . '/vendor/autoload.php',
+];
+
+$loaded = false;
+foreach ($autoloads as $file) {
+    if (is_file($file)) {
+        require $file;
+        $loaded = true;
+        break;
+    }
+}
+
+if (!$loaded) {
+    fwrite(\STDERR, '未找到 Composer autoload，请先执行 composer install。' . \PHP_EOL);
+    exit(1);
+}
+
+/** @var list<string> $argv */
+$argv = $_SERVER['argv'] ?? [];
+
+exit((new Kode\Server\Console\Cli())->run($argv));

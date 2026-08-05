@@ -1,0 +1,15 @@
+/vendor/
+/composer.lock
+/coverage/
+/.phpunit.cache/
+/.phpunit.result.cache
+/phpunit.xml
+/runtime/
+/build/
+*.pid
+*.log
+*.sock
+.DS_Store
+.idea/
+.vscode/
+.php-cs-fixer.cache

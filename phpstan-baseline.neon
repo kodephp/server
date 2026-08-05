@@ -1,0 +1,265 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Class GuzzleHttp\\Psr7\\HttpFactory not found\.$#'
+			identifier: class.notFound
+			count: 6
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class HttpSoft\\Message\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class HttpSoft\\Message\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class HttpSoft\\Message\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class HttpSoft\\Message\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class HttpSoft\\Message\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Kode\\Http\\Psr7\\Factory\\Psr17Factory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Kode\\Http\\Psr7\\Factory\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Kode\\Http\\Psr7\\Factory\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Kode\\Http\\Psr7\\Factory\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Kode\\Http\\Psr7\\Factory\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Kode\\Http\\Psr7\\Factory\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Laminas\\Diactoros\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Laminas\\Diactoros\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Laminas\\Diactoros\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Laminas\\Diactoros\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Laminas\\Diactoros\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Slim\\Psr7\\Factory\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Slim\\Psr7\\Factory\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Slim\\Psr7\\Factory\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Slim\\Psr7\\Factory\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Class Slim\\Psr7\\Factory\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class GuzzleHttp\\Psr7\\HttpFactory not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class HttpSoft\\Message\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class HttpSoft\\Message\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class HttpSoft\\Message\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class HttpSoft\\Message\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class HttpSoft\\Message\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Kode\\Http\\Psr7\\Factory\\Psr17Factory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Kode\\Http\\Psr7\\Factory\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Kode\\Http\\Psr7\\Factory\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Kode\\Http\\Psr7\\Factory\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Kode\\Http\\Psr7\\Factory\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Kode\\Http\\Psr7\\Factory\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Laminas\\Diactoros\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Laminas\\Diactoros\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Laminas\\Diactoros\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Laminas\\Diactoros\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Laminas\\Diactoros\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Slim\\Psr7\\Factory\\ResponseFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Slim\\Psr7\\Factory\\ServerRequestFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Slim\\Psr7\\Factory\\StreamFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Slim\\Psr7\\Factory\\UploadedFileFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php
+
+		-
+			message: '#^Instantiated class Slim\\Psr7\\Factory\\UriFactory not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Factories.php

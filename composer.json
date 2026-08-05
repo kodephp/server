@@ -1,0 +1,97 @@
+{
+    "name": "kode/server",
+    "description": "HTTP Server 生命周期管理层：start / stop / reload / onRequest 与 Master-Worker 进程管理、优雅重启、热重载，对标 Swoole\\Http\\Server，纯 PHP 8.3+ 可运行，Swoole 可选加速",
+    "type": "library",
+    "keywords": [
+        "server",
+        "http-server",
+        "lifecycle",
+        "master-worker",
+        "graceful-restart",
+        "hot-reload",
+        "prefork",
+        "swoole",
+        "psr-7",
+        "psr-15",
+        "php83",
+        "kodephp"
+    ],
+    "homepage": "https://github.com/kodephp/server",
+    "license": "Apache-2.0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "KodePHP Team",
+            "email": "382601296@qq.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/kodephp/server/issues",
+        "source": "https://github.com/kodephp/server",
+        "docs": "https://github.com/kodephp/server#readme"
+    },
+    "require": {
+        "php": "^8.3",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.1 || ^2.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/log": "^2.0 || ^3.0"
+    },
+    "require-dev": {
+        "nyholm/psr7": "^1.8",
+        "phpstan/phpstan": "^1.11 || ^2.0",
+        "phpunit/phpunit": "^11.0 || ^12.0"
+    },
+    "suggest": {
+        "ext-pcntl": "启用 Master-Worker 多进程模型、信号控制与优雅重启（缺失时降级为单进程模式）",
+        "ext-posix": "启用 PID 存活探测、进程降权与守护化",
+        "ext-sockets": "启用 SO_REUSEPORT 等更精细的套接字选项",
+        "ext-swoole": "启用 Swoole 驱动（协程 + 更高吞吐）",
+        "kode/http": "提供 PSR-7/PSR-17 消息实现，装上后自动发现使用",
+        "kode/middleware": "PSR-15 中间件管道，可直接作为 onRequest 处理器",
+        "kode/router": "路由分发，可直接作为 onRequest 处理器",
+        "nyholm/psr7": "轻量 PSR-7/PSR-17 实现（未安装 kode/http 时的备选）"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kode\\Server\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kode\\Server\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/kode-server"
+    ],
+    "scripts": {
+        "test": "phpunit",
+        "test-unit": "phpunit --testsuite Unit",
+        "test-coverage": "phpunit --coverage-html coverage",
+        "analyse": "phpstan analyse --memory-limit=512M",
+        "check": [
+            "@analyse",
+            "@test"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        },
+        "kode": {
+            "name": "Kode\\Server",
+            "description": "HTTP 服务生命周期管理层",
+            "category": "kode"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
