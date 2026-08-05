@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kode\Server\Process;
 
+use Kode\Process\Signal;
 use Kode\Server\Config\ServerConfig;
-use Kode\Server\Enum\Signal;
 use Kode\Server\Enum\State;
 use Kode\Server\Support\Sys;
 
@@ -64,7 +64,7 @@ final class Controller
         }
 
         if (!$graceful) {
-            Sys::kill($pid, Signal::Kill->value);
+            Sys::kill($pid, Signal::KILL);
             $this->waitGone($pid, 3.0);
             $this->cleanup();
 
@@ -73,10 +73,10 @@ final class Controller
 
         $timeout ??= $this->config->gracefulTimeout + $this->config->stopTimeout + 2.0;
 
-        Sys::kill($pid, Signal::Term->value);
+        Sys::kill($pid, Signal::TERM);
 
         if (!$this->waitGone($pid, $timeout)) {
-            Sys::kill($pid, Signal::Kill->value);
+            Sys::kill($pid, Signal::KILL);
             $this->waitGone($pid, 3.0);
         }
 
@@ -97,7 +97,7 @@ final class Controller
             return false;
         }
 
-        return Sys::kill($pid, Signal::usr1());
+        return Sys::kill($pid, Signal::USR1);
     }
 
     /**
@@ -107,7 +107,7 @@ final class Controller
     {
         $pid = $this->pid();
 
-        return $pid !== null && Sys::kill($pid, Signal::usr2());
+        return $pid !== null && Sys::kill($pid, Signal::USR2);
     }
 
     /**

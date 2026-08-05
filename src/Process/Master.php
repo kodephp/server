@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kode\Server\Process;
 
+use Kode\Process\Signal;
 use Kode\Server\Config\ServerConfig;
 use Kode\Server\Contract\WatcherInterface;
 use Kode\Server\Enum\Event;
-use Kode\Server\Enum\Signal;
 use Kode\Server\Event\Emitter;
 use Kode\Server\Exception\ProcessException;
 use Kode\Server\Support\Sys;
@@ -205,7 +205,7 @@ final class Master
             $this->emitter->emit(Event::WorkerExit, $slot, $pid, $exitCode, $signal);
 
             $context = ['slot' => $slot, 'pid' => $pid, 'code' => $exitCode, 'signal' => $signal, 'lifetime' => round($lifetime, 2)];
-            if ($exitCode === 0 || $signal === Signal::Term->value) {
+            if ($exitCode === 0 || $signal === Signal::TERM) {
                 $this->logger->info('Worker #{slot}(pid {pid}) 已退出', $context);
             } else {
                 $this->logger->error('Worker #{slot}(pid {pid}) 非正常退出 code={code} signal={signal}', $context);
@@ -228,7 +228,7 @@ final class Master
      */
     private function scheduleRespawn(int $slot, float $lifetime, int $exitCode, int $signal): void
     {
-        $crashed = $lifetime < self::CRASH_WINDOW && $exitCode !== 0 && $signal !== Signal::Term->value;
+        $crashed = $lifetime < self::CRASH_WINDOW && $exitCode !== 0 && $signal !== Signal::TERM;
 
         if (!$crashed) {
             $this->crashes[$slot] = 0;
@@ -413,7 +413,7 @@ final class Master
             if (!isset($this->workers[$pid])) {
                 continue; // 已经自己退出了
             }
-            Sys::kill($pid, Signal::Term->value);
+            Sys::kill($pid, Signal::TERM);
 
             return;
         }
@@ -446,7 +446,7 @@ final class Master
 
     private function terminateAll(bool $graceful): void
     {
-        $signal = $graceful ? Signal::Term->value : Signal::Kill->value;
+        $signal = $graceful ? Signal::TERM : Signal::KILL;
         foreach (array_keys($this->workers) as $pid) {
             Sys::kill($pid, $signal);
         }
@@ -456,7 +456,7 @@ final class Master
     {
         foreach (array_keys($this->workers) as $pid) {
             $this->logger->warning('Worker pid {pid} 未在期限内退出，发送 SIGKILL', ['pid' => $pid]);
-            Sys::kill($pid, Signal::Kill->value);
+            Sys::kill($pid, Signal::KILL);
         }
 
         // 给内核一点时间把子进程收掉，避免留下僵尸
@@ -469,7 +469,7 @@ final class Master
 
     private function installSignals(): void
     {
-        Signals::ignore(\defined('SIGPIPE') ? (int) \constant('SIGPIPE') : 13);
+        Signals::ignore(Signal::PIPE);
 
         $handlers = [];
         foreach (Signals::terminationSignals() as $signal) {
@@ -477,23 +477,23 @@ final class Master
                 $this->stop(true);
             };
         }
-        $handlers[Signal::Hup->value] = function (): void {
+        $handlers[Signal::HUP] = function (): void {
             $this->reload();
         };
-        $handlers[Signal::usr1()] = function (): void {
+        $handlers[Signal::USR1] = function (): void {
             $this->reload();
         };
-        $handlers[Signal::usr2()] = function (): void {
+        $handlers[Signal::USR2] = function (): void {
             if (method_exists($this->logger, 'reopen')) {
                 $this->logger->reopen();
             }
             $this->logger->info('日志文件已重新打开');
         };
         // 子进程退出只需唤醒主循环，真正的回收在 reap() 里做
-        $handlers[Signal::chld()] = static function (): void {
+        $handlers[Signal::CHLD] = static function (): void {
         };
 
-        Signals::install($handlers);
+        Signals::install($handlers, $this->logger);
     }
 
     private function cleanup(): void

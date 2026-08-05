@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kode\Server\Process;
 
+use Kode\Process\Signal;
 use Kode\Server\Config\ServerConfig;
 use Kode\Server\Contract\LoopInterface;
 use Kode\Server\Enum\Event;
-use Kode\Server\Enum\Signal;
 use Kode\Server\Event\Emitter;
 use Kode\Server\Http\Connection;
 use Kode\Server\Http\Dispatcher;
@@ -147,7 +147,7 @@ final class Worker
     {
         // SIGPIPE 必须忽略：往已被对端关闭的连接里写数据是常态，
         // 默认处理会直接杀死进程。
-        Signals::ignore(\defined('SIGPIPE') ? (int) \constant('SIGPIPE') : 13);
+        Signals::ignore(Signal::PIPE);
 
         $handlers = [];
         foreach (Signals::terminationSignals() as $signal) {
@@ -155,17 +155,17 @@ final class Worker
                 $this->beginShutdown(true);
             };
         }
-        $handlers[Signal::usr1()] = function (): void {
+        $handlers[Signal::USR1] = function (): void {
             $this->beginShutdown(true);
         };
-        $handlers[Signal::usr2()] = function (): void {
+        $handlers[Signal::USR2] = function (): void {
             if (method_exists($this->logger, 'reopen')) {
                 $this->logger->reopen();
             }
         };
         // Worker 不处理 SIGCHLD，交还默认行为，避免误吞业务自己 fork 的子进程
-        Signals::reset(Signal::chld());
-        Signals::install($handlers);
+        Signals::reset(Signal::CHLD);
+        Signals::install($handlers, $this->logger);
     }
 
     private function startAccepting(): void

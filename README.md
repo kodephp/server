@@ -13,6 +13,64 @@
 
 ---
 
+## 作为 kode 生态的组合根
+
+`kode/server` 不重复造轮子——它是把 kode 生态里三块能力收口、对外统一暴露的**组合根（composition root）**：
+
+| 能力 | 基座包 | 在 kode/server 里的位置 |
+| --- | --- | --- |
+| 进程 / 守护 / 信号 / 滚动重载 | [`kode/process`](https://github.com/kodephp/process) | `Master`-`Worker` 预派生由它提供；信号常量取自 `Kode\Process\Signal` |
+| 协程运行时 | [`kode/fibers`](https://github.com/kodephp/fibers) | `Server::coroutine()` 暴露，handler 内跑并发子任务 |
+| 并行卸载 | [`kode/parallel`](https://github.com/kodephp/parallel) | `Server::parallel()` 暴露，把 CPU 密集任务 offload 到独立运行时 |
+
+因此 `kode/server` 自身只保留**真正属于 HTTP 服务层**的部分：增量式 HTTP/1.1 解析、PSR 桥接、`Server` 门面、驱动（`stream`/`swoole`/`single`）与 CLI。进程管理、信号处理、热重载、协程调度全部委托给上层基座包——它们的版本演进会自动惠及本包。
+
+> 设计取舍：kode/process 是「任务 / Worker 池」模型（IPC 派发 `assignTask`），没有 HTTP `accept` 循环，所以 `kode/server` **保留了自己的 accept 循环**，只把信号值 / 命名 / 进程生命周期交给 kode/process。
+
+---
+
+## 在 handler 内使用协程与并行
+
+`kode/server` 不绑死执行模型：handler 里想并发就并发，想卸载就卸载。闭包里用 `use ($server)` 拿到门面即可。
+
+```php
+<?php
+use Kode\Server\Server;
+use Psr\Http\Message\ServerRequestInterface;
+
+$server = new Server(['host' => '0.0.0.0', 'port' => 9501, 'workers' => 4]);
+
+$server->onRequest(function (ServerRequestInterface $req) use ($server) {
+    $id = $req->getQueryParams()['id'] ?? 0;
+
+    // 协程：并发抓取多个下游（基于 kode/fibers）
+    [$user, $orders] = $server->coroutine()->batch(
+        [fn () => fetchUser($id), fn () => fetchOrders($id)],
+        concurrency: 2,
+    );
+
+    // 并行：把 CPU 密集任务 offload 到独立运行时（基于 kode/parallel）
+    $future = $server->parallel()->run(
+        fn (array $a) => heavyCompute($a['n']),
+        ['n' => 1_000_000],
+    );
+    $score = $server->parallel()->await($future);
+
+    return ['user' => $user, 'orders' => $orders, 'score' => $score];
+});
+
+$server->start();
+```
+
+`coroutine()` 返回的对象满足 `Kode\Process\Coroutine\CoroutineDriverInterface`
+（`go` / `batch` / `sleep` / `createChannel` / `createWaitGroup`），以后可整体替换为 Swow 等其它后端：
+
+```php
+$server->setCoroutineDriver(new MySwowDriver());
+```
+
+---
+
 ## 安装
 
 ```bash
@@ -27,6 +85,8 @@ PSR-17 工厂实现按需安装其一即可（自动发现，无需配置）：
 composer require kode/http      # 推荐
 # 或 nyholm/psr7、guzzlehttp/psr7、laminas/diactoros、slim/psr7 ...
 ```
+
+> **运行期依赖**：`kode/server` 强制依赖 `kode/process`、`kode/fibers`、`kode/parallel` 三个基座包，它们需能从 Packagist 解析（已发布即可）。本地 monorepo 开发时，把它们的 `path` 仓库写在 `composer.local.json`（已 gitignore）里即可联调，无需改动发布的 `composer.json`。
 
 ---
 
@@ -221,6 +281,12 @@ return function (\Psr\Http\Message\ServerRequestInterface $req) {
 composer test-unit     # 单元测试（解析器 / 配置 / 驱动）
 composer analyse       # PHPStan 静态分析（level 6）
 composer check         # analyse + test
+```
+
+端到端冒烟（跨进程跑通 启动 → 请求 → 滚动重载 → 停止，并在真实请求内验证协程）：
+
+```bash
+php scripts/e2e.php    # 全绿即通过；退出码非 0 为失败
 ```
 
 ---

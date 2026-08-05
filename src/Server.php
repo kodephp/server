@@ -19,6 +19,9 @@ use Kode\Server\Http\Factories;
 use Kode\Server\Http\RequestBuilder;
 use Kode\Server\Process\Controller;
 use Kode\Server\Reload\FileWatcher;
+use Kode\Process\Coroutine\CoroutineDriverInterface;
+use Kode\Server\Coroutine\FiberCoroutineDriver;
+use Kode\Server\Parallel\Parallel;
 use Kode\Server\Support\Logger;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
@@ -36,6 +39,11 @@ use Throwable;
  * 职责边界很清楚：**它只管生命周期，不管路由、不管中间件、不管业务**。
  * 路由交给 kode/router，中间件交给 kode/middleware，
  * 它们最终都以一个 PSR-15 处理器的形式挂进来。
+ *
+ * 作为组合根，它把 kode 生态的三块能力收口并对外暴露，供 handler 在请求内使用：
+ *  - 进程基座：kode/process（Master-Worker、守护、信号、滚动重载）
+ *  - 协程运行时：kode/fibers（coroutine() 跑并发子任务）
+ *  - 并行卸载：kode/parallel（parallel() 把 CPU 密集任务 offload 到独立运行时）
  *
  * 一个实例的两种角色，注意区分：
  *  - **服务进程内**（start() 正在阻塞）：stop()/reload() 直接操作驱动；
@@ -61,6 +69,10 @@ final class Server
     private State $state = State::Stopped;
 
     private bool $debug = false;
+
+    private ?CoroutineDriverInterface $coroutineDriver = null;
+
+    private ?Parallel $parallel = null;
 
     /**
      * @param array<string, mixed>|ServerConfig $config
@@ -169,6 +181,49 @@ final class Server
         $this->watcher = $watcher;
 
         return $this;
+    }
+
+    /**
+     * 注入协程驱动（组合根：默认基于 kode/fibers 的实现）。
+     *
+     * handler 内可用它跑并发子任务；满足 kode/process 的 CoroutineDriverInterface，
+     * 以后可整体替换成 Swow 等其它后端。
+     */
+    public function setCoroutineDriver(CoroutineDriverInterface $driver): self
+    {
+        $this->coroutineDriver = $driver;
+
+        return $this;
+    }
+
+    /**
+     * 协程驱动（惰性单例）。handler 内用它以 kode/fibers 并发执行子任务。
+     *
+     *   $server->coroutine()->go(fn () => slowIo());
+     *   $rows = $server->coroutine()->batch($ids, fn ($id) => fetch($id), 8);
+     */
+    public function coroutine(): CoroutineDriverInterface
+    {
+        if ($this->coroutineDriver === null) {
+            $this->coroutineDriver = new FiberCoroutineDriver();
+        }
+
+        return $this->coroutineDriver;
+    }
+
+    /**
+     * 并行卸载门面（惰性单例）。handler 内把 CPU 密集任务 offload 到独立运行时。
+     *
+     *   $future = $server->parallel()->run(fn ($a) => heavy($a[0]), [$n]);
+     *   $result = $server->parallel()->await($future);
+     */
+    public function parallel(): Parallel
+    {
+        if ($this->parallel === null) {
+            $this->parallel = new Parallel();
+        }
+
+        return $this->parallel;
     }
 
     // ------------------------------------------------------------------

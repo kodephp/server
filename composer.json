@@ -1,6 +1,6 @@
 {
     "name": "kode/server",
-    "description": "HTTP Server 生命周期管理层：start / stop / reload / onRequest 与 Master-Worker 进程管理、优雅重启、热重载，对标 Swoole\\Http\\Server，纯 PHP 8.3+ 可运行，Swoole 可选加速",
+    "description": "HTTP Server 生命周期管理层：start / stop / reload / onRequest 与 Master-Worker 进程管理、优雅重启、热重载，对标 Swoole\\Http\\Server。组合 kode/process（进程基座）、kode/fibers（协程运行时）、kode/parallel（并行卸载），纯 PHP 8.3+ 可运行，Swoole 可选加速",
     "type": "library",
     "keywords": [
         "server",
@@ -11,6 +11,9 @@
         "hot-reload",
         "prefork",
         "swoole",
+        "fibers",
+        "coroutine",
+        "parallel",
         "psr-7",
         "psr-15",
         "php83",
@@ -18,7 +21,6 @@
     ],
     "homepage": "https://github.com/kodephp/server",
     "license": "Apache-2.0",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "KodePHP Team",
@@ -35,7 +37,10 @@
         "psr/http-factory": "^1.0",
         "psr/http-message": "^1.1 || ^2.0",
         "psr/http-server-handler": "^1.0",
-        "psr/log": "^2.0 || ^3.0"
+        "psr/log": "^2.0 || ^3.0",
+        "kode/process": "*",
+        "kode/fibers": "*",
+        "kode/parallel": "*"
     },
     "require-dev": {
         "nyholm/psr7": "^1.8",
@@ -47,6 +52,7 @@
         "ext-posix": "启用 PID 存活探测、进程降权与守护化",
         "ext-sockets": "启用 SO_REUSEPORT 等更精细的套接字选项",
         "ext-swoole": "启用 Swoole 驱动（协程 + 更高吞吐）",
+        "ext-parallel": "启用 kode/parallel 真线程引擎（需 ZTS 构建）",
         "kode/http": "提供 PSR-7/PSR-17 消息实现，装上后自动发现使用",
         "kode/middleware": "PSR-15 中间件管道，可直接作为 onRequest 处理器",
         "kode/router": "路由分发，可直接作为 onRequest 处理器",
@@ -80,7 +86,10 @@
     },
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "*": true
+        }
     },
     "extra": {
         "branch-alias": {
@@ -91,7 +100,5 @@
             "description": "HTTP 服务生命周期管理层",
             "category": "kode"
         }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    }
 }
