@@ -1,6 +1,6 @@
 # kode/server
 
-> HTTP Server 生命周期管理层 —— 对标 Swoole 的 `Http\Server`，但纯 PHP 8.3+ 即可运行。
+> HTTP Server 生命周期管理层 —— 对标 Swoole 的 `Http\Server`，但纯 PHP 8.4+ 即可运行。
 
 `kode/server` 只做一件事：把"如何启动一个 HTTP 服务、如何接收并派发请求、如何让它优雅地重启与停止"这套生命周期管清楚。它是 [kode](https://github.com/kodephp) 框架的进程启动服务层，但本身零框架依赖，可以独立使用。
 
@@ -62,7 +62,7 @@ $server->onRequest(function (ServerRequestInterface $req) use ($server) {
 $server->start();
 ```
 
-`coroutine()` 返回的对象满足 `Kode\Process\Coroutine\CoroutineDriverInterface`
+`coroutine()` 返回的对象满足 `Kode\Server\Contract\CoroutineDriverInterface`
 （`go` / `batch` / `sleep` / `createChannel` / `createWaitGroup`），以后可整体替换为 Swow 等其它后端：
 
 ```php

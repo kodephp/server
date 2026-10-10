@@ -6,7 +6,7 @@ namespace Kode\Server\Coroutine;
 
 use Fiber;
 use Kode\Fibers\Fibers;
-use Kode\Process\Coroutine\WaitGroupInterface;
+use Kode\Server\Contract\WaitGroupInterface;
 
 /**
  * 计数式等待组，适配 kode/process 的 WaitGroupInterface。

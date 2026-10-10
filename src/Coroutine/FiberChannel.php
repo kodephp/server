@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kode\Server\Coroutine;
 
-use Kode\Process\Coroutine\ChannelInterface;
+use Kode\Server\Contract\ChannelInterface;
 
 /**
  * 进程内有界队列式通道，适配 kode/process 的 ChannelInterface。

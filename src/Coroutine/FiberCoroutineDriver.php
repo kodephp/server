@@ -6,12 +6,12 @@ namespace Kode\Server\Coroutine;
 
 use Fiber;
 use Kode\Fibers\Fibers;
-use Kode\Process\Coroutine\ChannelInterface;
-use Kode\Process\Coroutine\CoroutineDriverInterface;
-use Kode\Process\Coroutine\WaitGroupInterface;
+use Kode\Server\Contract\ChannelInterface;
+use Kode\Server\Contract\CoroutineDriverInterface;
+use Kode\Server\Contract\WaitGroupInterface;
 
 /**
- * 基于 kode/fibers 的协程驱动，满足 kode/process 的 CoroutineDriverInterface。
+ * 基于 kode/fibers 的协程驱动，满足 kode/server 的 Contract\CoroutineDriverInterface。
  *
  * 这让 kode/server 的 onRequest handler 在 Worker 进程内直接复用 kode 生态的
  * 协程运行时：并发子任务用 go()/batch()，无需自己引一套调度器。

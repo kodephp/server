@@ -1,6 +1,6 @@
 {
     "name": "kode/server",
-    "description": "HTTP Server 生命周期管理层：start / stop / reload / onRequest 与 Master-Worker 进程管理、优雅重启、热重载，对标 Swoole\\Http\\Server。组合 kode/process（进程基座）、kode/fibers（协程运行时）、kode/parallel（并行卸载），纯 PHP 8.3+ 可运行，Swoole 可选加速",
+    "description": "HTTP Server 生命周期管理层：start / stop / reload / onRequest 与 Master-Worker 进程管理、优雅重启、热重载，对标 Swoole\\Http\\Server。组合 kode/process（进程基座）、kode/fibers（协程运行时）、kode/parallel（并行卸载），纯 PHP 8.4+ 可运行，Swoole 可选加速",
     "type": "library",
     "keywords": [
         "server",
@@ -16,11 +16,11 @@
         "parallel",
         "psr-7",
         "psr-15",
-        "php83",
+        "php84",
         "kodephp"
     ],
     "homepage": "https://github.com/kodephp/server",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -34,14 +34,14 @@
         "docs": "https://github.com/kodephp/server#readme"
     },
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "psr/http-factory": "^1.0",
         "psr/http-message": "^1.1 || ^2.0",
         "psr/http-server-handler": "^1.0",
         "psr/log": "^2.0 || ^3.0",
-        "kode/process": "^3.2",
-        "kode/fibers": "^4.0",
-        "kode/parallel": "^1.6"
+        "kode/process": "^6",
+        "kode/fibers": "^5",
+        "kode/parallel": "^2"
     },
     "require-dev": {
         "nyholm/psr7": "^1.8",

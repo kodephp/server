@@ -19,7 +19,7 @@ use Kode\Server\Http\Factories;
 use Kode\Server\Http\RequestBuilder;
 use Kode\Server\Process\Controller;
 use Kode\Server\Reload\FileWatcher;
-use Kode\Process\Coroutine\CoroutineDriverInterface;
+use Kode\Server\Contract\CoroutineDriverInterface;
 use Kode\Server\Coroutine\FiberCoroutineDriver;
 use Kode\Server\Parallel\Parallel;
 use Kode\Server\Support\Logger;
@@ -186,7 +186,7 @@ final class Server
     /**
      * 注入协程驱动（组合根：默认基于 kode/fibers 的实现）。
      *
-     * handler 内可用它跑并发子任务；满足 kode/process 的 CoroutineDriverInterface，
+     * handler 内可用它跑并发子任务；满足 kode/server 的 Contract\CoroutineDriverInterface，
      * 以后可整体替换成 Swow 等其它后端。
      */
     public function setCoroutineDriver(CoroutineDriverInterface $driver): self
