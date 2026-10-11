@@ -515,9 +515,8 @@ final class Cli
         static $supported = null;
 
         if ($supported === null) {
-            $supported = \function_exists('posix_isatty')
-                && \defined('STDOUT')
-                && @posix_isatty(\STDOUT)
+            $supported = \defined('STDOUT')
+                && \stream_isatty(\STDOUT)
                 && getenv('NO_COLOR') === false;
         }
 

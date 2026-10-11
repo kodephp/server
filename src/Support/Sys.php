@@ -52,7 +52,7 @@ final class Sys
 
         $count = 0;
         if (\function_exists('swoole_cpu_num')) {
-            $count = (int) \call_user_func('swoole_cpu_num');
+            $count = (int) \swoole_cpu_num();
         }
 
         if ($count < 1 && is_readable('/proc/cpuinfo')) {

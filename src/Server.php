@@ -433,9 +433,8 @@ final class Server
         // 守护进程和重定向输出时不上色，避免日志文件里全是转义序列
         $colors = !$this->serverConfig->daemon
             && $this->serverConfig->logFile === null
-            && \function_exists('posix_isatty')
             && \defined('STDOUT')
-            && @posix_isatty(\STDOUT);
+            && \stream_isatty(\STDOUT);
 
         return new Logger($this->serverConfig->logFile, $this->serverConfig->logLevel, $colors);
     }
