@@ -40,16 +40,19 @@ final class SwooleDriver extends AbstractDriver
 
     private ?object $server = null;
 
+    #[\Override]
     public function name(): string
     {
         return 'swoole';
     }
 
+    #[\Override]
     public static function isSupported(): bool
     {
         return Sys::hasSwoole() && class_exists(self::SERVER_CLASS);
     }
 
+    #[\Override]
     public function run(): void
     {
         if (!self::isSupported()) {
@@ -72,6 +75,7 @@ final class SwooleDriver extends AbstractDriver
         }
     }
 
+    #[\Override]
     public function shutdown(bool $graceful = true): void
     {
         $server = $this->server;
@@ -86,6 +90,7 @@ final class SwooleDriver extends AbstractDriver
         $call();
     }
 
+    #[\Override]
     public function reloadWorkers(): void
     {
         $server = $this->server;
@@ -100,6 +105,7 @@ final class SwooleDriver extends AbstractDriver
     /**
      * @return array<string, mixed>
      */
+    #[\Override]
     public function stats(): array
     {
         $server = $this->server;

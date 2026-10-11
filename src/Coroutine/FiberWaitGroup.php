@@ -18,6 +18,7 @@ final class FiberWaitGroup implements WaitGroupInterface
 {
     private int $count = 0;
 
+    #[\Override]
     public function add(int $delta = 1): void
     {
         if ($delta < 0) {
@@ -26,6 +27,7 @@ final class FiberWaitGroup implements WaitGroupInterface
         $this->count += $delta;
     }
 
+    #[\Override]
     public function done(): void
     {
         if ($this->count > 0) {
@@ -33,6 +35,7 @@ final class FiberWaitGroup implements WaitGroupInterface
         }
     }
 
+    #[\Override]
     public function wait(float $timeout = -1): bool
     {
         $deadline = $timeout < 0 ? null : microtime(true) + $timeout;
@@ -52,6 +55,7 @@ final class FiberWaitGroup implements WaitGroupInterface
         return true;
     }
 
+    #[\Override]
     public function getCount(): int
     {
         return $this->count;

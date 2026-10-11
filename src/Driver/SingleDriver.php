@@ -32,16 +32,19 @@ final class SingleDriver extends AbstractDriver
 
     private ?Status $status = null;
 
+    #[\Override]
     public function name(): string
     {
         return 'single';
     }
 
+    #[\Override]
     public static function isSupported(): bool
     {
         return true; // 只用到 streams，任何环境都能跑
     }
 
+    #[\Override]
     public function run(): void
     {
         $startedAt = microtime(true);
@@ -94,11 +97,13 @@ final class SingleDriver extends AbstractDriver
         }
     }
 
+    #[\Override]
     public function shutdown(bool $graceful = true): void
     {
         $this->worker?->stop($graceful);
     }
 
+    #[\Override]
     public function reloadWorkers(): void
     {
         // 单进程没有可替换的对象，重载语义上等价于"优雅退出，由外部拉起"
@@ -109,6 +114,7 @@ final class SingleDriver extends AbstractDriver
     /**
      * @return array<string, mixed>
      */
+    #[\Override]
     public function stats(): array
     {
         return ['driver' => $this->name()] + ($this->worker?->stats() ?? []);

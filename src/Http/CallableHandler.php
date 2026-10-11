@@ -48,6 +48,7 @@ final class CallableHandler implements RequestHandlerInterface
         $this->factories = $factories;
     }
 
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->coerce(($this->callback)($request));

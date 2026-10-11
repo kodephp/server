@@ -24,16 +24,19 @@ final class StreamDriver extends AbstractDriver
 {
     private ?Master $master = null;
 
+    #[\Override]
     public function name(): string
     {
         return 'stream';
     }
 
+    #[\Override]
     public static function isSupported(): bool
     {
         return Sys::hasPcntl() && !Sys::isWindows();
     }
 
+    #[\Override]
     public function run(): void
     {
         $this->master = new Master(
@@ -52,11 +55,13 @@ final class StreamDriver extends AbstractDriver
         }
     }
 
+    #[\Override]
     public function shutdown(bool $graceful = true): void
     {
         $this->master?->stop($graceful);
     }
 
+    #[\Override]
     public function reloadWorkers(): void
     {
         $this->master?->reload();
@@ -65,6 +70,7 @@ final class StreamDriver extends AbstractDriver
     /**
      * @return array<string, mixed>
      */
+    #[\Override]
     public function stats(): array
     {
         return ['driver' => $this->name()] + ($this->master?->stats() ?? []);

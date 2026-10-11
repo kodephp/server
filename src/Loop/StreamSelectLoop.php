@@ -49,6 +49,7 @@ final class StreamSelectLoop implements LoopInterface
         $this->hasPcntl = \function_exists('pcntl_signal_dispatch');
     }
 
+    #[\Override]
     public function onReadable($stream, callable $listener): void
     {
         $key = (int) $stream;
@@ -56,12 +57,14 @@ final class StreamSelectLoop implements LoopInterface
         $this->readListeners[$key] = $listener;
     }
 
+    #[\Override]
     public function offReadable($stream): void
     {
         $key = (int) $stream;
         unset($this->readStreams[$key], $this->readListeners[$key]);
     }
 
+    #[\Override]
     public function onWritable($stream, callable $listener): void
     {
         $key = (int) $stream;
@@ -69,12 +72,14 @@ final class StreamSelectLoop implements LoopInterface
         $this->writeListeners[$key] = $listener;
     }
 
+    #[\Override]
     public function offWritable($stream): void
     {
         $key = (int) $stream;
         unset($this->writeStreams[$key], $this->writeListeners[$key]);
     }
 
+    #[\Override]
     public function addTimer(float $delay, callable $callback): string
     {
         $id = 't' . (++$this->timerSequence);
@@ -83,6 +88,7 @@ final class StreamSelectLoop implements LoopInterface
         return $id;
     }
 
+    #[\Override]
     public function addPeriodicTimer(float $interval, callable $callback): string
     {
         $interval = max(0.001, $interval);
@@ -92,21 +98,25 @@ final class StreamSelectLoop implements LoopInterface
         return $id;
     }
 
+    #[\Override]
     public function cancelTimer(string $timerId): void
     {
         unset($this->timers[$timerId]);
     }
 
+    #[\Override]
     public function defer(callable $callback): void
     {
         $this->deferred[] = $callback;
     }
 
+    #[\Override]
     public function isRunning(): bool
     {
         return $this->running;
     }
 
+    #[\Override]
     public function run(): void
     {
         $this->running = true;
@@ -132,6 +142,7 @@ final class StreamSelectLoop implements LoopInterface
         $this->running = false;
     }
 
+    #[\Override]
     public function stop(): void
     {
         $this->running = false;

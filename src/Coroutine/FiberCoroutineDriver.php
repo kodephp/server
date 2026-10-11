@@ -28,11 +28,13 @@ use Kode\Server\Contract\WaitGroupInterface;
  */
 final class FiberCoroutineDriver implements CoroutineDriverInterface
 {
+    #[\Override]
     public function getName(): string
     {
         return 'kode/fibers';
     }
 
+    #[\Override]
     public function go(callable $callback): mixed
     {
         return Fibers::go($callback);
@@ -43,16 +45,19 @@ final class FiberCoroutineDriver implements CoroutineDriverInterface
      *
      * @return array<array-key, mixed>
      */
+    #[\Override]
     public function batch(array $items, callable $callback, int $concurrency = 10): array
     {
         return Fibers::batch($items, $callback, $concurrency);
     }
 
+    #[\Override]
     public function sleep(float $seconds): void
     {
         Fibers::sleep($seconds);
     }
 
+    #[\Override]
     public function getCurrentId(): int
     {
         $fiber = Fiber::getCurrent();
@@ -60,16 +65,19 @@ final class FiberCoroutineDriver implements CoroutineDriverInterface
         return $fiber === null ? 0 : spl_object_id($fiber);
     }
 
+    #[\Override]
     public function inCoroutine(): bool
     {
         return Fiber::getCurrent() !== null;
     }
 
+    #[\Override]
     public function createChannel(int $capacity = 0): ChannelInterface
     {
         return new FiberChannel($capacity);
     }
 
+    #[\Override]
     public function createWaitGroup(): WaitGroupInterface
     {
         return new FiberWaitGroup();

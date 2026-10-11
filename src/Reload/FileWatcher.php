@@ -76,6 +76,7 @@ final class FileWatcher implements WatcherInterface
         }
     }
 
+    #[\Override]
     public function interval(): float
     {
         return $this->options->interval;
@@ -84,6 +85,7 @@ final class FileWatcher implements WatcherInterface
     /**
      * @return list<string> 发生变更的文件（相对可读路径），无变更返回空数组
      */
+    #[\Override]
     public function poll(): array
     {
         if ($this->disabled) {

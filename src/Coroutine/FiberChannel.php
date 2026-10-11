@@ -28,6 +28,7 @@ final class FiberChannel implements ChannelInterface
     {
     }
 
+    #[\Override]
     public function push(mixed $data, float $timeout = -1): bool
     {
         if ($this->closed) {
@@ -48,6 +49,7 @@ final class FiberChannel implements ChannelInterface
         return true;
     }
 
+    #[\Override]
     public function pop(float $timeout = -1): mixed
     {
         if ($this->isClosed() && $this->messages === []) {
@@ -69,22 +71,26 @@ final class FiberChannel implements ChannelInterface
         return array_shift($this->messages);
     }
 
+    #[\Override]
     public function close(): void
     {
         $this->closed = true;
         $this->messages = [];
     }
 
+    #[\Override]
     public function getCapacity(): int
     {
         return $this->capacity;
     }
 
+    #[\Override]
     public function getLength(): int
     {
         return \count($this->messages);
     }
 
+    #[\Override]
     public function isClosed(): bool
     {
         return $this->closed;
